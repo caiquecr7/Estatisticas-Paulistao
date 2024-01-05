@@ -1,4 +1,6 @@
-using EstatisticasFutebol.Components;
+using EstatisticasFutebol.Business_Logic.Services;
+using EstatisticasFutebol.Business_Logic.Services.Interface;
+using EstatisticasFutebol.Views.Components;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorComponents();
 builder.Services.AddMudServices();
+builder.Services.AddScoped<ITeamService, TeamService>();
 
 var app = builder.Build();
 
