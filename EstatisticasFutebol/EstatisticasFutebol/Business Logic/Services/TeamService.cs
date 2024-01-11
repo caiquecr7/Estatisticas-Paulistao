@@ -34,11 +34,9 @@ namespace EstatisticasFutebol.Business_Logic.Services
 
             newAwayProfile.VictoryOdd = (pastWeight * oldAwayProfile.VictoryOdd) + ((match.Odds.AwayOdd + match.HomeTeam.DifficultyLevel)* winWeight); 
             newAwayProfile.DrawOdd = (pastWeight * oldAwayProfile.DrawOdd) + ((match.Odds.DrawOdd + match.HomeTeam.DifficultyLevel) * drawWeight);
-            newAwayProfile.DefeatOdd = (pastWeight * oldAwayProfile.DefeatOdd) + (match.Odds.HomeOdd +(0.5 * (match.HomeTeam.DifficultyLevel/16)) * loseWeight);
+            newAwayProfile.DefeatOdd = (pastWeight * oldAwayProfile.DefeatOdd) + (match.Odds.HomeOdd +(0.5 * (match.HomeTeam.NationalRank/16)) * loseWeight);
 
-            var newAwayProfileNormalized = GetNormalizedProbabilites(newAwayProfile);
-
-            return newAwayProfileNormalized;
+            return GetNormalizedProbabilites(newAwayProfile);
         }
 
         public TeamProfile GetNewHomeProfile(MatchData match)
@@ -66,29 +64,10 @@ namespace EstatisticasFutebol.Business_Logic.Services
 
             newHomeProfile.VictoryOdd = (pastWeight * oldHomeProfile.VictoryOdd) + ((match.Odds.HomeOdd + match.AwayTeam.DifficultyLevel) * winWeight);
             newHomeProfile.DrawOdd = (pastWeight * oldHomeProfile.DrawOdd) + ((match.Odds.DrawOdd + match.AwayTeam.DifficultyLevel) * drawWeight);
-            newHomeProfile.DefeatOdd = (pastWeight * oldHomeProfile.DefeatOdd) + (match.Odds.AwayOdd + (0.5 * (match.AwayTeam.DifficultyLevel / 16)) * loseWeight);
+            newHomeProfile.DefeatOdd = (pastWeight * oldHomeProfile.DefeatOdd) + (match.Odds.AwayOdd + (0.5 * (match.AwayTeam.NationalRank / 16)) * loseWeight);
 
-            var newHomeProfileNormalized = GetNormalizedProbabilites(newHomeProfile);
-
-            return newHomeProfileNormalized;
+            return GetNormalizedProbabilites(newHomeProfile);
         }
-
-        //public Result GetMatchHomeResult(double[] matchData)
-        //{
-        //    Result result = new Result();
-        //    switch (matchData[3])
-        //    {
-        //        case -1:
-        //            result = Result.AwayWinner; break;
-        //        case 0: 
-        //            result = Result.Draw; break;
-        //        case 1:
-        //            result = Result.HomeWinner; break;
-        //        default: 
-        //            throw new NotImplementedException();
-        //    }
-        //    return result;
-        //}
 
 
         public TeamProfile GetNormalizedProbabilites(TeamProfile probabilities)

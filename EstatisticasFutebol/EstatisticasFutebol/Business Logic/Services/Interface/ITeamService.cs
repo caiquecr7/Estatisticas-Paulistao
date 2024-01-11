@@ -4,7 +4,8 @@ namespace EstatisticasFutebol.Business_Logic.Services.Interface
 {
     public interface ITeamService
     {
-        Task UpdateHomeProfile(Team team, double[] matchOdds);
-        Task UpdateAwayProfile(Team team, double[] matchOdds);
+        TeamProfile GetNewAwayProfile(MatchData match);
+        TeamProfile GetNewHomeProfile(MatchData match);
+        TeamProfile GetNormalizedProbabilites(TeamProfile probabilities);
     }
 }

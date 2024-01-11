@@ -5,8 +5,10 @@ namespace EstatisticasFutebol.Business_Logic.Services.Interface
 {
     public interface IRoundService
     {
-       Team SimulateRound(List<Team> teams);
-       Task<double[]> SimulateMatch(Team homeTeam, Team awayTeam);
+       void SimulateRound();
+       //Task<double[]> SimulateMatch(Team homeTeam, Team awayTeam);
+
+       //Task<>
 
     }
 }

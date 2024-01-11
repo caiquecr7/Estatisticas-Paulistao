@@ -6,7 +6,8 @@ namespace EstatisticasFutebol.Data.Models
     {
         public Team HomeTeam { get; set; }
         public Team AwayTeam { get; set; }
-        public MatchProfile Odds { get; set; }
+        public MatchProfile? Odds { get; set; }
+
         public Result FinalResult { get; set; }
 
 
