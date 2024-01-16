@@ -2,7 +2,7 @@
 using EstatisticasFutebol.Business_Logic.ApiServices.Interface;
 using EstatisticasFutebol.Business_Logic.Services.Interface;
 using EstatisticasFutebol.Data.Enum;
-using EstatisticasFutebol.Data.Models;
+using EstatisticasFutebol.Data.Entities;
 
 namespace EstatisticasFutebol.Business_Logic.Services
 {

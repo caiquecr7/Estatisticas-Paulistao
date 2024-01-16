@@ -1,5 +1,5 @@
 ﻿using EstatisticasFutebol.Business_Logic.ApiServices.Interface;
-using EstatisticasFutebol.Data.Models.ApiModels;
+using EstatisticasFutebol.Data.Entities.ApiModels;
 
 namespace EstatisticasFutebol.Business_Logic.ApiServices
 {

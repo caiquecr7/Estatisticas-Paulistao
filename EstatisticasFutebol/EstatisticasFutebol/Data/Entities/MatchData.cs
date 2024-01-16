@@ -1,13 +1,13 @@
 ﻿using EstatisticasFutebol.Data.Enum;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EstatisticasFutebol.Data.Models
+namespace EstatisticasFutebol.Data.Entities
 {
     public class MatchData
     {
         public Team HomeTeam { get; set; }
         public Team AwayTeam { get; set; }
         public MatchProfile? Odds { get; set; }
-
         public Result FinalResult { get; set; }
 
 
@@ -36,16 +36,20 @@ namespace EstatisticasFutebol.Data.Models
             if (randonNumber <= Odds.HomeOdd)
             {
                 result = Result.HomeWinner;
+                HomeTeam.SimulatedPoints += 3;
             }
 
-            else if (randonNumber > Odds.HomeOdd & randonNumber <= (Odds.HomeOdd + Odds.DrawOdd))
+            else if (randonNumber > Odds.HomeOdd & randonNumber <= Odds.HomeOdd + Odds.DrawOdd)
             {
                 result = Result.Draw;
+                HomeTeam.SimulatedPoints += 1;
+                AwayTeam.SimulatedPoints += 1;
             }
 
             else
             {
                 result = Result.AwayWinner;
+                AwayTeam.SimulatedPoints += 3;
             }
 
             FinalResult = result;

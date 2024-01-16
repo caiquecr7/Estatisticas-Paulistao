@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace EstatisticasFutebol.Data.Models.ApiModels
+namespace EstatisticasFutebol.Data.Entities.ApiModels
 {
     public class ApiTeam
     {

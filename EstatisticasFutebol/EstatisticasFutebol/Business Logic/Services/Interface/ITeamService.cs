@@ -1,11 +1,12 @@
-﻿using EstatisticasFutebol.Data.Models;
+﻿using EstatisticasFutebol.Data.Entities;
 
 namespace EstatisticasFutebol.Business_Logic.Services.Interface
 {
     public interface ITeamService
     {
-        TeamProfile GetNewAwayProfile(MatchData match);
-        TeamProfile GetNewHomeProfile(MatchData match);
-        TeamProfile GetNormalizedProbabilites(TeamProfile probabilities);
+        AwayProfile GetNewAwayProfile(MatchData match);
+        HomeProfile GetNewHomeProfile(MatchData match);
+        AwayProfile GetNormalizedAwayOdds(AwayProfile probabilities);
+        HomeProfile GetNormalizedHomeOdds(HomeProfile probabilities);
     }
 }

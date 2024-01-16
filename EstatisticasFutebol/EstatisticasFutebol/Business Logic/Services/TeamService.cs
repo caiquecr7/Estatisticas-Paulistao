@@ -1,15 +1,15 @@
-﻿using EstatisticasFutebol.Data.Models;
-using EstatisticasFutebol.Business_Logic.Services.Interface;
+﻿using EstatisticasFutebol.Business_Logic.Services.Interface;
 using EstatisticasFutebol.Data.Enum;
 using System.Security.Cryptography.Xml;
 using System.Text.RegularExpressions;
+using EstatisticasFutebol.Data.Entities;
 
 namespace EstatisticasFutebol.Business_Logic.Services
 {
     public class TeamService : ITeamService
     {
 
-        public TeamProfile GetNewAwayProfile(MatchData match)
+        public AwayProfile GetNewAwayProfile(MatchData match)
         {
             int pastWeight = 5;
             int winWeight = 0;
@@ -17,7 +17,7 @@ namespace EstatisticasFutebol.Business_Logic.Services
             int drawWeight = 0;
 
             var oldAwayProfile = match.AwayTeam.AwayProfile;
-            TeamProfile newAwayProfile = new TeamProfile();
+            AwayProfile newAwayProfile = new AwayProfile();
 
             if (match.FinalResult == Result.AwayWinner)
             {
@@ -29,17 +29,17 @@ namespace EstatisticasFutebol.Business_Logic.Services
             }
             else if (match.FinalResult == Result.HomeWinner)
             {
-                 loseWeight = 1;
+                loseWeight = 1;
             }
 
-            newAwayProfile.VictoryOdd = (pastWeight * oldAwayProfile.VictoryOdd) + ((match.Odds.AwayOdd + match.HomeTeam.DifficultyLevel)* winWeight); 
+            newAwayProfile.VictoryOdd = (pastWeight * oldAwayProfile.VictoryOdd) + ((match.Odds.AwayOdd + match.HomeTeam.DifficultyLevel) * winWeight);
             newAwayProfile.DrawOdd = (pastWeight * oldAwayProfile.DrawOdd) + ((match.Odds.DrawOdd + match.HomeTeam.DifficultyLevel) * drawWeight);
-            newAwayProfile.DefeatOdd = (pastWeight * oldAwayProfile.DefeatOdd) + (match.Odds.HomeOdd +(0.5 * (match.HomeTeam.NationalRank/16)) * loseWeight);
+            newAwayProfile.DefeatOdd =(pastWeight * oldAwayProfile.DefeatOdd) + (match.Odds.HomeOdd + (0.5 * (match.HomeTeam.NationalRank / 16)) * loseWeight);
 
-            return GetNormalizedProbabilites(newAwayProfile);
+            return GetNormalizedAwayOdds(newAwayProfile);
         }
 
-        public TeamProfile GetNewHomeProfile(MatchData match)
+        public HomeProfile GetNewHomeProfile(MatchData match)
         {
             int pastWeight = 5;
             int winWeight = 0;
@@ -47,7 +47,7 @@ namespace EstatisticasFutebol.Business_Logic.Services
             int drawWeight = 0;
 
             var oldHomeProfile = match.HomeTeam.HomeProfile;
-            TeamProfile newHomeProfile = new TeamProfile();
+            HomeProfile newHomeProfile = new HomeProfile();
 
             if (match.FinalResult == Result.HomeWinner)
             {
@@ -66,14 +66,21 @@ namespace EstatisticasFutebol.Business_Logic.Services
             newHomeProfile.DrawOdd = (pastWeight * oldHomeProfile.DrawOdd) + ((match.Odds.DrawOdd + match.AwayTeam.DifficultyLevel) * drawWeight);
             newHomeProfile.DefeatOdd = (pastWeight * oldHomeProfile.DefeatOdd) + (match.Odds.AwayOdd + (0.5 * (match.AwayTeam.NationalRank / 16)) * loseWeight);
 
-            return GetNormalizedProbabilites(newHomeProfile);
+            return GetNormalizedHomeOdds(newHomeProfile);
         }
 
 
-        public TeamProfile GetNormalizedProbabilites(TeamProfile probabilities)
+        public AwayProfile GetNormalizedAwayOdds(AwayProfile probabilities)
         {
             double total = probabilities.VictoryOdd + probabilities.DrawOdd + probabilities.DefeatOdd;
-            TeamProfile normalizedProbabilites = new TeamProfile(probabilities.VictoryOdd/total, probabilities.DrawOdd/total, probabilities.DefeatOdd/total);
+            AwayProfile normalizedProbabilites = new AwayProfile(probabilities.VictoryOdd / total, probabilities.DrawOdd / total, probabilities.DefeatOdd / total);
+            return normalizedProbabilites;
+        }
+
+        public HomeProfile GetNormalizedHomeOdds(HomeProfile probabilities)
+        {
+            double total = probabilities.VictoryOdd + probabilities.DrawOdd + probabilities.DefeatOdd;
+            HomeProfile normalizedProbabilites = new HomeProfile(probabilities.VictoryOdd / total, probabilities.DrawOdd / total, probabilities.DefeatOdd / total);
             return normalizedProbabilites;
         }
     }

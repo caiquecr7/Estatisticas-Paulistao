@@ -1,4 +1,4 @@
-﻿using EstatisticasFutebol.Data.Models.ApiModels;
+﻿using EstatisticasFutebol.Data.Entities.ApiModels;
 using Microsoft.AspNetCore.SignalR;
 
 namespace EstatisticasFutebol.Business_Logic.ApiServices.Interface

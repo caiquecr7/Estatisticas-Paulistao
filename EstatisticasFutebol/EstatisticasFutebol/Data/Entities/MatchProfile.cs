@@ -1,4 +1,4 @@
-﻿namespace EstatisticasFutebol.Data.Models
+﻿namespace EstatisticasFutebol.Data.Entities
 {
     public class MatchProfile
     {

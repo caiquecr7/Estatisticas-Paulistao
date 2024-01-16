@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace EstatisticasFutebol.Data.Models.ApiModels
+namespace EstatisticasFutebol.Data.Entities.ApiModels
 {
     public class ApiMatch
     {
@@ -15,7 +15,7 @@ namespace EstatisticasFutebol.Data.Models.ApiModels
         [JsonPropertyName("placar_mandante")]
         public int HomeScore { get; set; }
         [JsonPropertyName("placar_visitante")]
-        public int AwayScore { get; set;}
+        public int AwayScore { get; set; }
         [JsonPropertyName("status")]
         public string Status { get; set; }
 
