@@ -38,6 +38,8 @@ public partial class Team
     public int? GoalsDifference { get; set; }
 
     public double? ConversionRate { get; set; }
+    [NotMapped]
+    public int times_classified { get; set; }
 
     [NotMapped]
     public int _simulatedPoints;
@@ -47,13 +49,13 @@ public partial class Team
         get => _simulatedPoints;
         set => _simulatedPoints = value;
     }
+    [NotMapped]
+    public int TotalPoints => _simulatedPoints + Points;
     public double DifficultyLevel => 0.5 - (0.03125 * (NationalRank - 1));
 
     public virtual AwayProfile? AwayProfile { get; set; }
 
     public virtual HomeProfile? HomeProfile { get; set; }
-
-    public virtual ICollection<HomeProfile> HomeProfiles { get; set; } = new List<HomeProfile>();
 
     public Team(string name, HomeProfile homeProfile, AwayProfile awayProfile, int nationalRank)
     {
@@ -69,6 +71,6 @@ public partial class Team
 
     public void ResetPoints()
     {
-        SimulatedPoints = 0;
+        _simulatedPoints = 0;
     }
 }

@@ -15,8 +15,6 @@ public partial class HomeProfile
 
     public double DefeatOdd { get; set; }
 
-    public virtual Team TeamNavigation { get; set; } = null!;
-
     public virtual ICollection<Team> Teams { get; set; } = new List<Team>();
 
     public HomeProfile(double victoryOdd, double drawOdd, double defeatOdd)

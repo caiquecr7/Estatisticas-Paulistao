@@ -79,10 +79,7 @@ namespace EstatisticasFutebol.Migrations
                         .HasColumnType("float")
                         .HasDefaultValue(35.0);
 
-                    b.HasKey("Id")
-                        .HasName("PK_HomeProfiles");
-
-                    b.HasIndex("Team");
+                    b.HasKey("Id");
 
                     b.ToTable("HomeProfile", (string)null);
                 });
@@ -196,17 +193,6 @@ namespace EstatisticasFutebol.Migrations
                     b.ToTable("Team", (string)null);
                 });
 
-            modelBuilder.Entity("EstatisticasFutebol.Data.Entities.HomeProfile", b =>
-                {
-                    b.HasOne("EstatisticasFutebol.Data.Entities.Team", "TeamNavigation")
-                        .WithMany("HomeProfiles")
-                        .HasForeignKey("Team")
-                        .IsRequired()
-                        .HasConstraintName("FK_HomeProfile_Team");
-
-                    b.Navigation("TeamNavigation");
-                });
-
             modelBuilder.Entity("EstatisticasFutebol.Data.Entities.Team", b =>
                 {
                     b.HasOne("EstatisticasFutebol.Data.Entities.AwayProfile", "AwayProfile")
@@ -232,11 +218,6 @@ namespace EstatisticasFutebol.Migrations
             modelBuilder.Entity("EstatisticasFutebol.Data.Entities.HomeProfile", b =>
                 {
                     b.Navigation("Teams");
-                });
-
-            modelBuilder.Entity("EstatisticasFutebol.Data.Entities.Team", b =>
-                {
-                    b.Navigation("HomeProfiles");
                 });
 #pragma warning restore 612, 618
         }

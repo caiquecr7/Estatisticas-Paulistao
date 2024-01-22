@@ -24,8 +24,10 @@ public partial class UfabcEcContext : DbContext
     public virtual DbSet<RoundMatches> RoundMatches { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Password=ufabcec*2024;Persist Security Info=True;User ID=caiquecr;Initial Catalog=UfabcEC;Data Source=CTS1B147798\\SQLEXPRESS;TrustServerCertificate=True");
+    {
+        optionsBuilder.UseSqlServer("Password=ufabcec*2024;Persist Security Info=True;User ID=caiquecr;Initial Catalog=paulistao;Data Source=CTS1B147798\\SQLEXPRESS;TrustServerCertificate=True");
+        optionsBuilder.EnableSensitiveDataLogging();
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -44,8 +46,6 @@ public partial class UfabcEcContext : DbContext
 
         modelBuilder.Entity<HomeProfile>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK_HomeProfiles");
-
             entity.ToTable("HomeProfile");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
@@ -55,11 +55,6 @@ public partial class UfabcEcContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.VictoryOdd).HasDefaultValue(35f);
-
-            entity.HasOne(d => d.TeamNavigation).WithMany(p => p.HomeProfiles)
-                .HasForeignKey(d => d.Team)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_HomeProfile_Team");
         });
 
         modelBuilder.Entity<Team>(entity =>
@@ -99,10 +94,10 @@ public partial class UfabcEcContext : DbContext
             entity.ToTable("RoundMatches");
 
             entity.Property(e => e.Id).HasColumnName("Id");
-            entity.Property(e => e.Away_Team).HasMaxLength(50);
-            entity.Property(e => e.Away_Score);
             entity.Property(e => e.Home_Team).HasMaxLength(50);
             entity.Property(e => e.Home_Score);
+            entity.Property(e => e.Away_Team).HasMaxLength(50);
+            entity.Property(e => e.Away_Score);
             entity.Property(e => e.Round_Number);
             entity.Property(e => e.Finished);
         });

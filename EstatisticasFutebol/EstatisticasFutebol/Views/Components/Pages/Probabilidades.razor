@@ -1,0 +1,27 @@
+﻿@page "/Probabilidades"
+@attribute [StreamRendering]
+
+<PageTitle>Probabilidades</PageTitle>
+
+<h1>Probabilidades de classificação - Paulistão 2024</h1>
+
+<hr />
+
+@foreach(var groupLetter in Groups)
+{
+    <h3>Grupo @groupLetter</h3>
+
+    <MudTable Items="@GetTeamsForGroup(groupLetter)" Hover="true" Breakpoint="Breakpoint.Sm" LoadingProgressColor="Color.Info">
+        <HeaderContent>
+            <MudTh>Nome</MudTh>
+            <MudTh>Probabilidade</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="name">@context.Name</MudTd>
+                <MudTd DataLabel="Probabilidade">@($"{context.ConversionRate:P2}")</MudTd>
+            </RowTemplate>
+        </MudTable>
+
+    <hr />
+}
+

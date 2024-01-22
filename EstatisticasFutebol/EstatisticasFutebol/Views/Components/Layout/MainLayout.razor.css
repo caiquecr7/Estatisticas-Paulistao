@@ -94,3 +94,10 @@ main {
         right: 0.75rem;
         top: 0.5rem;
     }
+
+.insta-image {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    margin: auto;
+}

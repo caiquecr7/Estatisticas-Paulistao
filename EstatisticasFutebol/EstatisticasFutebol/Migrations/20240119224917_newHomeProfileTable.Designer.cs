@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EstatisticasFutebol.Migrations
 {
     [DbContext(typeof(UfabcEcContext))]
-    [Migration("20240115233726_New")]
-    partial class New
+    [Migration("20240119224917_newHomeProfileTable")]
+    partial class newHomeProfileTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -82,10 +82,7 @@ namespace EstatisticasFutebol.Migrations
                         .HasColumnType("float")
                         .HasDefaultValue(35.0);
 
-                    b.HasKey("Id")
-                        .HasName("PK_HomeProfiles");
-
-                    b.HasIndex("Team");
+                    b.HasKey("Id");
 
                     b.ToTable("HomeProfile", (string)null);
                 });
@@ -99,7 +96,7 @@ namespace EstatisticasFutebol.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Away_Score")
+                    b.Property<int?>("Away_Score")
                         .HasColumnType("int");
 
                     b.Property<string>("Away_Team")
@@ -110,7 +107,7 @@ namespace EstatisticasFutebol.Migrations
                     b.Property<bool>("Finished")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Home_Score")
+                    b.Property<int?>("Home_Score")
                         .HasColumnType("int");
 
                     b.Property<string>("Home_Team")
@@ -199,17 +196,6 @@ namespace EstatisticasFutebol.Migrations
                     b.ToTable("Team", (string)null);
                 });
 
-            modelBuilder.Entity("EstatisticasFutebol.Data.Entities.HomeProfile", b =>
-                {
-                    b.HasOne("EstatisticasFutebol.Data.Entities.Team", "TeamNavigation")
-                        .WithMany("HomeProfiles")
-                        .HasForeignKey("Team")
-                        .IsRequired()
-                        .HasConstraintName("FK_HomeProfile_Team");
-
-                    b.Navigation("TeamNavigation");
-                });
-
             modelBuilder.Entity("EstatisticasFutebol.Data.Entities.Team", b =>
                 {
                     b.HasOne("EstatisticasFutebol.Data.Entities.AwayProfile", "AwayProfile")
@@ -235,11 +221,6 @@ namespace EstatisticasFutebol.Migrations
             modelBuilder.Entity("EstatisticasFutebol.Data.Entities.HomeProfile", b =>
                 {
                     b.Navigation("Teams");
-                });
-
-            modelBuilder.Entity("EstatisticasFutebol.Data.Entities.Team", b =>
-                {
-                    b.Navigation("HomeProfiles");
                 });
 #pragma warning restore 612, 618
         }

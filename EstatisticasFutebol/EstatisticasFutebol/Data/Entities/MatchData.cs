@@ -33,6 +33,11 @@ namespace EstatisticasFutebol.Data.Entities
             var randonNumber = random.NextDouble();
             Result result = new Result();
 
+            if(AwayTeam.Name == "Santos" || HomeTeam.Name == "Santos")
+            {
+                Console.WriteLine();
+            }
+
             if (randonNumber <= Odds.HomeOdd)
             {
                 result = Result.HomeWinner;
@@ -51,8 +56,8 @@ namespace EstatisticasFutebol.Data.Entities
                 result = Result.AwayWinner;
                 AwayTeam.SimulatedPoints += 3;
             }
-
             FinalResult = result;
         }
+        public MatchData() { }
     }
 }
