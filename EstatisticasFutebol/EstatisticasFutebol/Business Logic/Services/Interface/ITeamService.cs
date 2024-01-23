@@ -1,14 +1,15 @@
 ﻿using EstatisticasFutebol.Data.Entities;
+using EstatisticasFutebol.Data.Entities.Simulation;
 
 namespace EstatisticasFutebol.Business_Logic.Services.Interface
 {
     public interface ITeamService
     {
-        AwayProfile GetNewAwayProfile(MatchData match);
-        HomeProfile GetNewHomeProfile(MatchData match);
-        AwayProfile GetNormalizedAwayOdds(AwayProfile probabilities);
-        HomeProfile GetNormalizedHomeOdds(HomeProfile probabilities);
-        List<Team> GetClassifiedTeams(List<Team> teams);
+        SimulationAwayProfile GetNewAwayProfile(SimulationMatch match);
+        SimulationHomeProfile GetNewHomeProfile(SimulationMatch match);
+        SimulationAwayProfile GetNormalizedAwayOdds(SimulationAwayProfile probabilities);
+        SimulationHomeProfile GetNormalizedHomeOdds(SimulationHomeProfile probabilities);
+        List<Team> GetClassifiedTeams(List<SimulationTeam> simulationTeams, List<Team> teams);
         Task GetConversionRate(List<Team> teams, int iterations);
     }
 }

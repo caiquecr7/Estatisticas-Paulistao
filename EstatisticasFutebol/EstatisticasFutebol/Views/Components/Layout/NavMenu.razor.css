@@ -21,7 +21,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 5rem;
+    height: 6rem;
 }
 
 .top-row {
@@ -116,3 +116,18 @@
         overflow-y: auto;
     }
 }
+
+.container-fluid {
+    align-items: center;
+}
+
+.logo-image {
+    text-align: center; 
+}
+
+    .logo-image img {
+        max-width: 100%;
+        max-height: 95px; 
+        display: block;
+        margin: 0 auto;
+    }

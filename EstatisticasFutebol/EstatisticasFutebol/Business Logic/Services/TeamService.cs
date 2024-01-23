@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using EstatisticasFutebol.Data.Entities;
 using EstatisticasFutebol.Data.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
+using EstatisticasFutebol.Data.Entities.Simulation;
 
 namespace EstatisticasFutebol.Business_Logic.Services
 {
@@ -19,7 +20,7 @@ namespace EstatisticasFutebol.Business_Logic.Services
             _dbContext = dbContext;
         }
 
-        public AwayProfile GetNewAwayProfile(MatchData match)
+        public SimulationAwayProfile GetNewAwayProfile(SimulationMatch match)
         {
             int pastWeight = 10;
             int winWeight = 0;
@@ -27,7 +28,7 @@ namespace EstatisticasFutebol.Business_Logic.Services
             int drawWeight = 0;
 
             var oldAwayProfile = match.AwayTeam.AwayProfile;
-            AwayProfile newAwayProfile = new AwayProfile();
+            SimulationAwayProfile newAwayProfile = new SimulationAwayProfile();
 
             if (match.FinalResult == Result.AwayWinner)
             {
@@ -49,7 +50,7 @@ namespace EstatisticasFutebol.Business_Logic.Services
             return GetNormalizedAwayOdds(newAwayProfile);
         }
 
-        public HomeProfile GetNewHomeProfile(MatchData match)
+        public SimulationHomeProfile GetNewHomeProfile(SimulationMatch match)
         {
             int pastWeight = 10;
             int winWeight = 0;
@@ -57,7 +58,7 @@ namespace EstatisticasFutebol.Business_Logic.Services
             int drawWeight = 0;
 
             var oldHomeProfile = match.HomeTeam.HomeProfile;
-            HomeProfile newHomeProfile = new HomeProfile();
+            SimulationHomeProfile newHomeProfile = new SimulationHomeProfile();
 
             if (match.FinalResult == Result.HomeWinner)
             {
@@ -80,31 +81,42 @@ namespace EstatisticasFutebol.Business_Logic.Services
         }
 
 
-        public AwayProfile GetNormalizedAwayOdds(AwayProfile probabilities)
+        public SimulationAwayProfile GetNormalizedAwayOdds(SimulationAwayProfile probabilities)
         {
             double total = probabilities.VictoryOdd + probabilities.DrawOdd + probabilities.DefeatOdd;
-            AwayProfile normalizedProbabilites = new AwayProfile(probabilities.VictoryOdd / total, probabilities.DrawOdd / total, probabilities.DefeatOdd / total);
-            return normalizedProbabilites;
+
+            probabilities.VictoryOdd = probabilities.VictoryOdd / total;
+            probabilities.DrawOdd = probabilities.DrawOdd / total;
+            probabilities.DefeatOdd = probabilities.DefeatOdd / total;
+
+            return probabilities;
         }
 
-        public HomeProfile GetNormalizedHomeOdds(HomeProfile probabilities)
+        public SimulationHomeProfile GetNormalizedHomeOdds(SimulationHomeProfile probabilities)
         {
             double total = probabilities.VictoryOdd + probabilities.DrawOdd + probabilities.DefeatOdd;
-            HomeProfile normalizedProbabilites = new HomeProfile(probabilities.VictoryOdd / total, probabilities.DrawOdd / total, probabilities.DefeatOdd / total);
-            return normalizedProbabilites;
+
+            probabilities.VictoryOdd = probabilities.VictoryOdd / total;
+            probabilities.DrawOdd = probabilities.DrawOdd / total;
+            probabilities.DefeatOdd = probabilities.DefeatOdd / total;
+
+            return probabilities;
         }
 
-        public List<Team> GetClassifiedTeams (List<Team> teams)
+        public List<Team> GetClassifiedTeams (List<SimulationTeam> simulationTeams, List<Team> teams)
         {
-            var teamsByGroup = teams.GroupBy(x => x.GroupLetter);
+            var teamsByGroup = simulationTeams.GroupBy(x => x.GroupLetter);
 
             foreach( var group in teamsByGroup)
             {
                 var classifiedTeams = group.OrderByDescending(x => x.TotalPoints).ThenBy(x => x.NationalRank).Take(2);
 
-                foreach( var team in classifiedTeams)
+                foreach (var team in teams.Where(t => t.GroupLetter == group.Key))
                 {
-                    team.times_classified++;
+                    if (classifiedTeams.Any(simulatedTeam => simulatedTeam.Id == team.Id))
+                    {
+                        team.times_classified += 1;
+                    }
                 }
             }
 
@@ -120,6 +132,7 @@ namespace EstatisticasFutebol.Business_Logic.Services
 
                 await _teamRepository.UpdateConversionRateAsync(team);
             }
+            
         }
 
     }

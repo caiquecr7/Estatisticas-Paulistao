@@ -13,6 +13,7 @@ public partial class UfabcEcContext : DbContext
     public UfabcEcContext(DbContextOptions<UfabcEcContext> options)
         : base(options)
     {
+        this.ChangeTracker.LazyLoadingEnabled = false;
     }
 
     public virtual DbSet<AwayProfile> AwayProfiles { get; set; }

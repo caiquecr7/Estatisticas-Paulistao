@@ -1,20 +1,23 @@
-﻿using EstatisticasFutebol.Data.Enum;
+﻿using EstatisticasFutebol.Data.Entities.Simulation;
+using EstatisticasFutebol.Data.Enum;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EstatisticasFutebol.Data.Entities
 {
-    public class MatchData
+    public class SimulationMatch
     {
-        public Team HomeTeam { get; set; }
-        public Team AwayTeam { get; set; }
+        public SimulationTeam HomeTeam { get; set; }
+        public SimulationTeam AwayTeam { get; set; }
         public MatchProfile? Odds { get; set; }
+        public int RoundNumber { get; set; }
         public Result FinalResult { get; set; }
 
 
-        public MatchData(Team homeTeam, Team awayTeam)
+        public SimulationMatch(SimulationTeam homeTeam, SimulationTeam awayTeam, int roundNumber)
         {
             HomeTeam = homeTeam;
             AwayTeam = awayTeam;
+            RoundNumber = roundNumber;
         }
 
         public void GetOneMatchOdds()
@@ -33,10 +36,6 @@ namespace EstatisticasFutebol.Data.Entities
             var randonNumber = random.NextDouble();
             Result result = new Result();
 
-            if(AwayTeam.Name == "Santos" || HomeTeam.Name == "Santos")
-            {
-                Console.WriteLine();
-            }
 
             if (randonNumber <= Odds.HomeOdd)
             {
@@ -58,6 +57,6 @@ namespace EstatisticasFutebol.Data.Entities
             }
             FinalResult = result;
         }
-        public MatchData() { }
+        public SimulationMatch() { }
     }
 }

@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Identity.Client;
 using EstatisticasFutebol.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
+using static MudBlazor.Colors;
 
 namespace EstatisticasFutebol.Business_Logic.Services
 {
@@ -31,62 +32,37 @@ namespace EstatisticasFutebol.Business_Logic.Services
             var allTeams = await _teamRepository.GetAllAsync();
             var matches = await _roundRepository.GetAllAsync();
 
-            var iterations = 10;
+            var iterations = 1000000;
             for (var i = 0; i < iterations; i++)
             {
-                var simulationTeams = new List<Team>();
+                var simulationMatches = await _matchService.ReadMatches(matches, allTeams);
 
                 for (int round = 1; round <= 12; round++)
                 {
-                    var roundMatches = matches.FindAll(x => x.Round_Number == round);
-                    var enableTracking = (round == 1);
+                    var roundMatches = simulationMatches.FindAll(x => x.RoundNumber == round);
 
-                    var simulationMatches = await _matchService.ReadMatches(roundMatches, enableTracking);
-
-                    foreach (var match in simulationMatches)
+                    foreach (var match in roundMatches)
                     {
                         SimulateMatch(match);
                     }
-
-                    var getSimulatedTeams = (round == 12);
-
-                    if (getSimulatedTeams)
-                    {
-                        simulationTeams = GetSimulatedTeamsData(simulationMatches);
-                    }
                 }
+                var simulationTeams = simulationMatches
+                    .Select(match => match.HomeTeam)
+                    .Distinct()
+                    .ToList();
 
-                allTeams = _teamService.GetClassifiedTeams(simulationTeams);
-
-                foreach(var team in allTeams)
-                {
-                    team.ResetPoints();
-                }
-
-                simulationTeams = null;
+                allTeams = _teamService.GetClassifiedTeams(simulationTeams, allTeams);
             }
 
             await _teamService.GetConversionRate(allTeams, iterations);
         }
 
-        public void SimulateMatch(MatchData match)
+        public void SimulateMatch(SimulationMatch match)
         {
             match.GetOneMatchOdds();
             match.GetOneMatchResult();
             match.HomeTeam.HomeProfile = _teamService.GetNewHomeProfile(match);
             match.AwayTeam.AwayProfile = _teamService.GetNewAwayProfile(match);
-        }
-
-        public List<Team> GetSimulatedTeamsData(List<MatchData> simulationMatches)
-        {
-            List<Team> simulationTeams = new List<Team>();
-            foreach (var match in simulationMatches)
-            {
-                simulationTeams.Add(match.HomeTeam);
-                simulationTeams.Add(match.AwayTeam);
-            }
-
-            return simulationTeams;
         }
     }
 }

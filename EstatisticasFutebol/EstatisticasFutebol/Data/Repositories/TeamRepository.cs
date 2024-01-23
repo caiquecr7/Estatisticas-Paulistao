@@ -1,4 +1,5 @@
-﻿using EstatisticasFutebol.Data.Entities;
+﻿using Dapper;
+using EstatisticasFutebol.Data.Entities;
 using EstatisticasFutebol.Data.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -39,7 +40,6 @@ namespace EstatisticasFutebol.Data.Repositories
                     .Include(x => x.HomeProfile)
                     .Include(x => x.AwayProfile)
                     .FirstOrDefaultAsync(x => x.Name == name);
-            //_dbContext.Entry(team).State = EntityState.Detached;
             return team;
         }
 
@@ -51,7 +51,6 @@ namespace EstatisticasFutebol.Data.Repositories
                     .AsNoTracking()
                     .FirstOrDefaultAsync(x => x.Name == name);
 
-            //_dbContext.Entry(team).State = EntityState.Detached;
             return team;
         }
 
@@ -63,14 +62,13 @@ namespace EstatisticasFutebol.Data.Repositories
 
         public async Task UpdateConversionRateAsync(Team team)
         {
-            _dbContext.Entry(team).State = EntityState.Detached;
-
-            var existingTeam = await _dbContext.Teams.FindAsync(team.Name);
+            var existingTeam = await _dbContext.Teams.FirstOrDefaultAsync(x => x.Name == team.Name);
 
             if (existingTeam != null)
             {
                 existingTeam.ConversionRate = team.ConversionRate;
 
+                _dbContext.Teams.Update(existingTeam);
                 await _dbContext.SaveChangesAsync();
             }
         }

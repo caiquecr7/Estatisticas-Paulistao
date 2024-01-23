@@ -53,9 +53,9 @@ public partial class Team
     public int TotalPoints => _simulatedPoints + Points;
     public double DifficultyLevel => 0.5 - (0.03125 * (NationalRank - 1));
 
-    public virtual AwayProfile? AwayProfile { get; set; }
+    public AwayProfile? AwayProfile { get; set; }
 
-    public virtual HomeProfile? HomeProfile { get; set; }
+    public HomeProfile? HomeProfile { get; set; }
 
     public Team(string name, HomeProfile homeProfile, AwayProfile awayProfile, int nationalRank)
     {
